@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: flower-container
-        image: muralisocial123/kyndrl-flower:v1.1.0
+        image: muralisocial123/kyndrl-flower-app:v1.1.0
         ports:
         - containerPort: 3015
         resources:
