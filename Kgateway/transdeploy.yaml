@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trans-deployment
+  namespace: akash-ns
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: trans
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: trans
+    spec:
+      containers:
+      - name: trans-container
+        image: muralisocial123/transaction-app:v1.0.0
+        ports:
+        - containerPort: 3000
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: trans-svc
+  namespace: akash-ns
+spec:
+  selector:
+    app: trans
+  ports:
+  - port: 80
+    targetPort: 3000
+    protocol: TCP
+  type: ClusterIP
