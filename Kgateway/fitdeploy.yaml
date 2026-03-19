@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fit-deployment
+  namespace: akash-ns
+  labels:
+    app: fit
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: fit
+  strategy: 
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: fit
+    spec:
+      containers:
+      - name: fit-cont
+        image: muralisocial123/fitness-app:v1.0.1
+        ports:
+        - containerPort: 5000
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fit-service
+  namespace: akash-ns
+spec:
+  selector:
+    app: fit
+  ports:
+  - port: 80
+    targetPort: 5000
+    protocol: TCP
+  type: ClusterIP
